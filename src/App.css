@@ -1,38 +1,91 @@
-.App {
-  text-align: center;
+.app-container {
+  position:absolute;
+  top:0;
+  right:0;
+  left:0;
+  bottom:0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.leaflet-container {
+  width:100%;
+  height:100%;
+  z-index: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body,
+#map {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#map {
+  position: absolute;
+  z-index: 1;
+}
+#control {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 1500;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  flex-direction: row;
+}
+#searchInput {
+  width: 325px;
+}
+#categoryButtons {
+  display: inline-table;
+  margin-left: 7px;
+  margin-top: 2px;
+  z-index: 999;
+}
+.categoryButton {
+  height: 25px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  box-shadow: 0 1px 2px rgb(76, 76, 76);
+  background-color: var(--calcite-ui-foreground-1);
+}
+.categoryButton :host button {
+  block-size: unset;
+  inline-size: unset;
+}
+.container,
+.content-container,
+calcite-panel {
+  background-color: transparent;
+}
+#flowPanel {
+  position: absolute;
+  max-height: 80%;
+  top: 52px;
+  left: 15px;
+  width: 325px;
+  z-index: 999;
+  cursor:default;
+}
+#flowPanel calcite-flow-item {
+  cursor:default;
 }
 
-.App-link {
-  color: #61dafb;
+#resultList calcite-block:hover,
+header {
+  background: var(--calcite-ui-foreground-2);
+}
+.hide {
+  display: none;
+}
+.leaflet-popup-content {
+  font-size: 0.9em;
+  margin: 5px 20px 5px 10px !important;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.geocodeSuggestions {
+  z-index:2000;
+  position:absolute;
+  top:135px;
+  left:15px;
+  width:325px;
+  height:auto;
 }
