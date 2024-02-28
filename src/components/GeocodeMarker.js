@@ -1,16 +1,16 @@
 import {
     createElementHook, createPathHook, createElementObject
 } from '@react-leaflet/core';
-import { circleMarker } from 'leaflet';
+import { circleMarker, layerGroup } from 'leaflet';
 import { useEffect } from 'react';
 import { useMap } from 'react-leaflet';
 
-const createMarker = (props,context) => {
+const createMarker = (props) => {
 
     const location = [props.geocode.location.y,props.geocode.location.x];
     const label = props.geocode.address;
 
-    const placeMarker = circleMarker(location, {
+    const geocodeMarker = circleMarker(location, {
         radius:7,
         color:"#000000",
         weight:4,
@@ -20,17 +20,28 @@ const createMarker = (props,context) => {
         fillOpacity:1.0
     })
     .bindPopup(`<b>${label}</b>`);
-    return createElementObject(placeMarker, context);
+    return geocodeMarker;
+}
 
+const initMarker = (props,context) => {
+    const group = layerGroup({
+        pane:'markerPane'
+    })
+    const marker = createMarker(props);
+    marker.addTo(group);
+    return createElementObject(group, context);
 }
 
 const updateMarker = (instance, props, prevProps) => {
+    if (props.geocode.location !== prevProps.geocode.location) {
+        instance.clearLayers();
+        createMarker(props).addTo(instance);
+    }
     return null;
-    // there should not be any use case for this update function
 }
 
 
-const useGeocodeMarkerElement = createElementHook(createMarker,updateMarker);
+const useGeocodeMarkerElement = createElementHook(initMarker,updateMarker);
 const useGeocodeMarker = createPathHook(useGeocodeMarkerElement);
 
 const GeocodeMarker = (props) => {

@@ -25,8 +25,8 @@ const NavigationControl = (props) => {
 
     const queryRoute = async () => {
         if (!props.start || !props.destination) return;
-        
-        const result = await fetchRoute([props.start.location.x,props.start.location.y],props.destination);
+
+        const result = await fetchRoute([props.start.location.x,props.start.location.y],[props.destination.location.x,props.destination.location.y]);
 
         setAppState({...appState,route: result})
 
@@ -53,7 +53,7 @@ const NavigationControl = (props) => {
     return (
         <CalciteFlowItem closable={true} heading='Route' onCalciteFlowItemClose={resetPanel} onCalciteFlowItemBack={back}>
             <CalciteInputText onKeyUp={e=>setAppState({...appState,searchQuery:e.target.value})} id="navigationInput"/>
-            <CalciteInputText value={props.destination} disabled/>
+            <CalciteInputText value={props.destination.name} disabled/>
             <CalciteButton onClick={queryRoute}>Solve route</CalciteButton>
             {directions}
         </CalciteFlowItem>

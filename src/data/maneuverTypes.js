@@ -44,6 +44,9 @@ const maneuverTypes = {
     esriDMTHighwayChange:{
         icon:'highway-change'
     },
+    esriDMTHighwayChangeRight:{
+        icon:'highway-change-right'
+    },
     esriDMTRampRight:{
         icon:'ramp-right'
     },
@@ -70,6 +73,15 @@ const maneuverTypes = {
     },
     esriDMTTurnRightRight:{
         icon:'right-right'
+    },
+    esriDMTTurnLeftRight:{
+        icon:'left-right'
+    },
+    esriDMTTurnRightLeft:{
+        icon:'right-left'
+    },
+    esriDMTTurnLeftLeft:{
+        icon:'left-left'
     }
 }
 

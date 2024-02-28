@@ -51,7 +51,7 @@ const PlaceDetails = (props) => {
     }
 
     const openNavigation = (e) => {
-        setAppState({...appState, destination:[placeDetails.location.x,placeDetails.location.y]})
+        setAppState({...appState, destination:{name:placeDetails.name,location:placeDetails.location}})
     }
     // TODO send request here based on the ID stored in appState.placeId
     return placeDetails && (
