@@ -25,7 +25,7 @@ const createMarker = (props) => {
 
 const initMarker = (props,context) => {
     const group = layerGroup({
-        pane:'markerPane'
+        pane:'tooltipPane'
     })
     const marker = createMarker(props);
     marker.addTo(group);

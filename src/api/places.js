@@ -10,11 +10,15 @@ export const fetchPlaces = async (query,map) => {
     const bounds = map.getBounds()
     const topRight = bounds.getNorthEast()
     const bottomLeft = bounds.getSouthWest()
+
+    // Request parameters
     const params = {
+        // Search bounds
         xmin: bottomLeft.lng,
         ymin: bottomLeft.lat,
         xmax: topRight.lng,
         ymax: topRight.lat,
+        // Search text / category
         categoryIds: query.placeType?.categoryIds,
         searchText: query.searchText,
         pageSize:20,
@@ -25,7 +29,10 @@ export const fetchPlaces = async (query,map) => {
     else params.categoryIds = query;
 
     try {
+        // REST JS service call
         let response = await findPlacesWithinExtent(params)
+
+        // Paginate results
         if (response.results.length > 0) {
             let results = response.results;
             while (response.nextPage) {
@@ -49,6 +56,7 @@ export const fetchPlaceDetails = async (placeId) => {
         authentication,
     }
     try {
+        // REST JS service call
         const result = await getPlaceDetails(params)
         
         return result.placeDetails;

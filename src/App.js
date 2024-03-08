@@ -36,16 +36,16 @@ function App() {
   const appContext = {appState,setAppState}
 
   // basemap places control
-  const [places, setPlaces] = useState('none');
-  if (appState.state === 'default' && places === 'none') setPlaces('attributed');
-  else if (appState.state !== 'default' && places === 'attributed') setPlaces('none');
+  const [places, setPlaces] = useState('attributed');
+  //if (appState.state === 'default' && places === 'none') setPlaces('attributed');
+  //else if (appState.state !== 'default' && places === 'attributed') setPlaces('none');
 
   //console.log(appState);
-
+  
   return (
     <AppContext.Provider value={appContext}>
       <div className="app-container">
-        <MapContainer center={[34.0566, -117.195]} zoom={16} zoomControl={false}>
+        <MapContainer center={[33.8219, -116.5468]} zoom={16} zoomControl={false}>
               {/* Map and basemap controls */}
               <ZoomControl position='bottomright' />
               <LayersControl position="bottomright">
