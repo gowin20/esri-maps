@@ -3,24 +3,25 @@ import {
     createPathComponent
 } from '@react-leaflet/core'
 import { vectorBasemapLayer } from 'esri-leaflet-vector';
-import { layerGroup } from 'leaflet';
 import { apiKey } from '../App';
 
-// VectorBasemapLayer class with react-leaflet
+// VectorBasemapLayer component: Renders a vector basemap layer using Esri Leaflet Vector
+// Data source: ArcGIS basemap styles service
 
+// Initialization function used to create layer
 const createVectorBasemap = (props,context) => {
-    const basemapGroup = layerGroup();
     const basemap = new vectorBasemapLayer(props.styleName,{
-        token:apiKey,
+        token:apiKey, // ArcGIS API key
         places:props.places || 'attributed'
     })
-    basemapGroup.addLayer(basemap);
     return createElementObject(basemap, context)
 }
+
+// Update function triggered when component props change
 const updateVectorBasemap = (instance,props,prevProps) => {
 
     if (props.places !== prevProps.places) {
-
+        // Filter basemap places using underlying MapLibre map
         const mlMap = instance._maplibreGL._glMap;
         const style = mlMap.getStyle();
         const places = style.layers.filter((lyr) => lyr.source === "esri-places")
@@ -36,5 +37,6 @@ const updateVectorBasemap = (instance,props,prevProps) => {
         }
     }
 }
+
 const VectorBasemapLayer = createPathComponent(createVectorBasemap,updateVectorBasemap);
 export default VectorBasemapLayer;

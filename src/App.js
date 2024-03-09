@@ -48,7 +48,7 @@ function App() {
               <ZoomControl position='bottomright' />
               <LayersControl position="bottomright">
                   <LayersControl.BaseLayer checked name="Default">
-                      <VectorBasemapLayer styleName='arcgis/navigation' places={places}/>
+                      <VectorBasemapLayer styleName='arcgis/navigation' places={places}/> {/* Places is only supported by arcgis/navigation */}
                   </LayersControl.BaseLayer>
                   <LayersControl.BaseLayer name="Satellite">
                       <VectorBasemapLayer styleName='arcgis/imagery'/>

@@ -4,31 +4,22 @@ import {
     createPathHook
 } from '@react-leaflet/core'
 import { useMap } from "react-leaflet";
-import { getSymbolLookUp } from '../data/symbols.js';
 import { layerGroup, marker, divIcon } from 'leaflet';
 import { useEffect,useContext } from 'react';
 import { AppContext } from "../App.js";
 
-// TODO on places layer click set appState.focus    // .on("click", clickZoom)
-
-
-// Place results code
-
-function getIconMarkerLookUp(categories) {
-    const iconMarker = getSymbolLookUp(categories)
-    return divIcon({
-      html: iconMarker,
-      className: "marker-icon",
-      iconAnchor: [10, 13],
-      popupAnchor: [0, -12],
-    })
-}
+// PlacesLayer: Renders a list of place results on the map
 
 const populatePlacesLayer = (placesLayer,places) => {
     // This method populates a Leaflet LayerGroup with place results
     for (const placeResult of places) {
-        const icon = getIconMarkerLookUp(placeResult.categories) // Find best icon for each place
-
+        const icon = divIcon({
+            html: `<img src="${placeResult.icon.url}" width="21px" height="21px">`,
+            className: "marker-icon",
+            iconAnchor: [10, 13],
+            popupAnchor: [0, -12],
+          })
+        console.log(icon)
         const thisMarker = marker(
         [placeResult.location.y, placeResult.location.x],
         { autoPan: true, icon: icon }

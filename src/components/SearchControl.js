@@ -1,5 +1,5 @@
 import placeTypes, {getPlaceType} from '../data/placeTypes.js';
-import { fetchPlaces } from '../api/places.js';
+import { fetchPlaces,fetchPlacesRaw } from '../api/places.js';
 import { AppContext } from "../App.js";
 
 import { useMap } from "react-leaflet";
@@ -28,8 +28,8 @@ const SearchControl = () => {
     console.log(map.getZoom());
     const queryPlaces = async (categoryIds) => {
         let results;
-        if (categoryIds) results = await fetchPlaces(categoryIds,map);
-        else results = await fetchPlaces(query,map);
+        if (categoryIds) results = await fetchPlacesRaw(categoryIds,map);
+        else results = await fetchPlacesRaw(query,map);
         if (results) setAppState({...appState, state: 'placeResults', placeResults:results})
     }
 
