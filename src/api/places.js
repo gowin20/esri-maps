@@ -1,4 +1,4 @@
-import { findPlacesWithinExtent,getPlaceDetails,getCategory } from '@esri/arcgis-rest-places';
+import { findPlacesWithinExtent,getPlaceDetails } from '@esri/arcgis-rest-places';
 import { authentication, apiKey } from "../App.js";
 
 // Get places in a bounding box
@@ -42,7 +42,7 @@ export const fetchPlaces = async (query,map) => {
                 response = await response.nextPage();
                 results = results.concat(response.results)
             }
-            console.log('Place results:',results)
+            console.log('Results:',results)
             return results;
 
         }

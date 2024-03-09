@@ -87,7 +87,7 @@ function App() {
               
               {/* Places map layers */}
               {appState.placeResults && !appState.destination && (
-                <PlacesLayer places={appState.placeResults}/>
+                <PlacesLayer places={appState.placeResults} focus={appState.focus}/>
               )}
               {appState.focus && (
                 <PlaceMarker focus={appState.focus}/>

@@ -10,27 +10,31 @@ import { AppContext } from "../App.js";
 
 // PlacesLayer: Renders a list of place results on the map
 
-const populatePlacesLayer = (placesLayer,places) => {
-    // This method populates a Leaflet LayerGroup with place results
-    for (const placeResult of places) {
-        const icon = divIcon({
-            html: `<img src="${placeResult.icon.url}" width="21px" height="21px">`,
-            className: "marker-icon",
-            iconAnchor: [10, 13],
-            popupAnchor: [0, -12],
-          })
-        console.log(icon)
-        const thisMarker = marker(
+const createPlaceMarker = (placeResult) => {
+    const icon = divIcon({
+        html: `<img src="${placeResult.icon.url}" width="21px" height="21px">`,
+        className: "marker-icon",
+        iconAnchor: [10, 13],
+        popupAnchor: [0, -12],
+      })
+    const thisMarker = marker(
         [placeResult.location.y, placeResult.location.x],
         { autoPan: true, icon: icon }
-        )
+    )
+    thisMarker.placeId = placeResult.placeId;
+    return thisMarker;
+}
 
-        thisMarker.id = placeResult.placeId // set place id
+// This method populates a Leaflet LayerGroup with place results
+const populatePlacesLayer = (placesLayer,places) => {
+    for (const placeResult of places) {
+        const thisMarker = createPlaceMarker(placeResult);
         placesLayer.addLayer(thisMarker);   
     }
     return placesLayer;
 }
 
+// This method runs when the component is initialized
 const initPlacesLayer = (props,context) => {
     // Create and populate a LayerGroup to display places
     const placesLayer = layerGroup();
@@ -38,13 +42,25 @@ const initPlacesLayer = (props,context) => {
     return createElementObject(placesLayer, context);
 }
 
+// This method runs whenever the component props change
 const updatePlacesLayer = (instance,props,prevProps) => {
     // Repopulate places layer when params change
     if (props.places !== prevProps.places) {
         instance.clearLayers();
         populatePlacesLayer(instance,props.places);
     }
+    // Hide the category icon for the currently focused place
+    if (props.focus !== prevProps.focus) {
+        populatePlacesLayer(instance,props.places);
 
+        if (props.focus) {
+            instance.eachLayer((lyr)=>{
+                if (lyr.placeId === props.focus.placeId) {
+                    instance.removeLayer(lyr);
+                }
+            })
+        }
+    }
 }
 
 const usePlacesLayerElement = createElementHook(initPlacesLayer,updatePlacesLayer);
@@ -59,10 +75,11 @@ const PlacesLayer = (props) => {
     const map = useMap();
     useEffect(()=>{
         map.eachLayer((lyr)=>{
-            if (lyr.id) {
+            if (lyr.placeId) {
                 lyr.on('click',(e)=>{
                     // TODO find result object in props.places and set focus to *that*
-                    const placeFocus = props.places.find(place => place.placeId === lyr.id);
+                    console.log('click!')
+                    const placeFocus = props.places.find(place => place.placeId === lyr.placeId);
                     setAppState({...appState,focus:placeFocus});
                 })
             }

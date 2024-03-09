@@ -25,7 +25,6 @@ const SearchControl = () => {
     const {appState, setAppState} = useContext(AppContext);
     const map = useMap();
 
-    console.log(map.getZoom());
     const queryPlaces = async (categoryIds) => {
         let results;
         if (categoryIds) results = await fetchPlacesRaw(categoryIds,map);
