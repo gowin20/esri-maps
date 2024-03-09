@@ -86,8 +86,8 @@ const maneuverTypes = {
 }
 
 export const getManeuverIcon = (maneuverType) => {
-    console.log(maneuverType);
-    return maneuverTypes[maneuverType].icon;
+    if (maneuverType in maneuverTypes) return maneuverTypes[maneuverType].icon;
+    else return 'straight';
 }
 
 export default maneuverTypes;

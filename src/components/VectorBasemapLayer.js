@@ -8,32 +8,32 @@ import { apiKey } from '../App';
 
 // VectorBasemapLayer class with react-leaflet
 
-
-// genius idea: use a LayerGroup wrapper to gain access to LayerGroup.removeLayers() and easily update the basemap!
-
 const createVectorBasemap = (props,context) => {
     const basemapGroup = layerGroup();
     const basemap = new vectorBasemapLayer(props.styleName,{
         token:apiKey,
-        places:props.places || 'all'
+        places:props.places || 'attributed'
     })
     basemapGroup.addLayer(basemap);
-    return createElementObject(basemapGroup, context)
+    return createElementObject(basemap, context)
 }
 const updateVectorBasemap = (instance,props,prevProps) => {
 
     if (props.places !== prevProps.places) {
-        // I don't think this code actually works... we don't have access to the leaflet context here so we can't add the new layer
-          // TODO figure out how to erase basemap places using this lifecycle updater
 
-        instance.clearLayers();
-
-        const basemap = new vectorBasemapLayer(props.styleName,{
-            token:apiKey,
-            places:props.places || 'all'
-        })
-        instance.addLayer(basemap)
-        //instance._maplibreGL.options.style.replace(`&places=${prevProps.places}`,`&places=${props.places}`)
+        const mlMap = instance._maplibreGL._glMap;
+        const style = mlMap.getStyle();
+        const places = style.layers.filter((lyr) => lyr.source === "esri-places")
+        if (props.places === 'none') {
+            places.forEach((lyr) => {
+                mlMap.setLayoutProperty(lyr.id, "visibility", "none")
+            })
+        }
+        else if (props.places === 'attributed') {
+            places.forEach((lyr) => {
+                mlMap.setLayoutProperty(lyr.id, "visibility", "visible")
+            }) 
+        }
     }
 }
 const VectorBasemapLayer = createPathComponent(createVectorBasemap,updateVectorBasemap);

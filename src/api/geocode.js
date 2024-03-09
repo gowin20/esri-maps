@@ -1,6 +1,7 @@
 import {suggest, geocode} from '@esri/arcgis-rest-geocoding';
 import { authentication } from "../App";
 
+// Autosuggest geocoding results
 export const findSuggestions = async (query,center) => {
     if (!query || !center) return;
 
@@ -13,6 +14,7 @@ export const findSuggestions = async (query,center) => {
     return response.suggestions;
 }
 
+// Perform a geocode request
 export const getAddressCandidate = async (text,key) => {
     if (!text && !key) return;
     console.log('Geocode request:',text);

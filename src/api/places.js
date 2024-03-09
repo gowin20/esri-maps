@@ -1,6 +1,7 @@
 import { findPlacesWithinExtent,getPlaceDetails } from '@esri/arcgis-rest-places';
 import { authentication } from "../App.js";
 
+// Get places in a bounding box
 export const fetchPlaces = async (query,map) => {
 
     if (!query) return;

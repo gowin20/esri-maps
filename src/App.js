@@ -37,11 +37,9 @@ function App() {
 
   // basemap places control
   const [places, setPlaces] = useState('attributed');
-  //if (appState.state === 'default' && places === 'none') setPlaces('attributed');
-  //else if (appState.state !== 'default' && places === 'attributed') setPlaces('none');
+  if (appState.state === 'default' && places === 'none') setPlaces('attributed');
+  else if (appState.state !== 'default' && places === 'attributed') setPlaces('none');
 
-  //console.log(appState);
-  
   return (
     <AppContext.Provider value={appContext}>
       <div className="app-container">
@@ -77,7 +75,9 @@ function App() {
                   )}
               </CalciteFlow>
 
-              {/* Geocoding control and layer */}
+              {/* Geocoding control and layer 
+              TODO add reverse geocode functionality on map click when 
+              */}
               {appState.searchQuery && (
                 <GeocodeSuggestions query={appState.searchQuery}/>
               )}
@@ -86,7 +86,7 @@ function App() {
               )}
               
               {/* Places map layers */}
-              {appState.placeResults && !appState.focus && (
+              {appState.placeResults && !appState.destination && (
                 <PlacesLayer places={appState.placeResults}/>
               )}
               {appState.focus && (

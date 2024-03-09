@@ -30,7 +30,7 @@ const SearchControl = () => {
         let results;
         if (categoryIds) results = await fetchPlaces(categoryIds,map);
         else results = await fetchPlaces(query,map);
-        setAppState({...appState, state: 'placeResults', placeResults:results})
+        if (results) setAppState({...appState, state: 'placeResults', placeResults:results})
     }
 
     const categoryChipClicked = (e) => {
