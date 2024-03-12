@@ -1,5 +1,5 @@
 import placeTypes, {getPlaceType} from '../data/placeTypes.js';
-import { fetchPlaces,fetchPlacesRaw } from '../api/places.js';
+import { fetchPlacesRaw } from '../api/places.js';
 import { AppContext } from "../App.js";
 
 import { useMap } from "react-leaflet";
@@ -10,25 +10,20 @@ import "@esri/calcite-components/dist/components/calcite-chip-group";
 import "@esri/calcite-components/dist/components/calcite-chip";
 import "@esri/calcite-components/dist/components/calcite-avatar";
 import { CalciteInput, CalciteButton, CalciteChipGroup, CalciteChip, CalciteAvatar } from '@esri/calcite-components-react';
-import GeocodeSuggestions from './NavGeocodeSuggest.js';
 
-// TODO
-// autosuggest results in dropdown modal with high z-index
-// make geocoding requests as well instead of just fetching places
-// add navigation button to search bar
-
-
-// figure out how to delete the search bar content
-
+// SearchControl.js: Places search bar at the top of the map containing a place search text box and category search chips
 const SearchControl = () => {
     const [query,setQuery] = useState(null);
     const {appState, setAppState} = useContext(AppContext);
     const map = useMap();
 
+    // Perform a find places within extent request 
     const queryPlaces = async (categoryIds) => {
+        // Perform REST API call
         let results;
         if (categoryIds) results = await fetchPlacesRaw(categoryIds,map);
         else results = await fetchPlacesRaw(query,map);
+        // Pass results to global app state
         if (results) setAppState({...appState, state: 'placeResults', placeResults:results})
     }
 
@@ -46,7 +41,6 @@ const SearchControl = () => {
         </CalciteChip>;
         categoryChips.push(chip);
     })
-    //console.log('control: ',query)
 
     return (
     <div id="control">

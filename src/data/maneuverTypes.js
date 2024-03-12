@@ -1,3 +1,5 @@
+// This file is used to fetch calcite-ui-icons for the routing widget in components/NavigationControl.js
+// Unfortunately the routing service does not currently return a mapping between esriDMTManeuvers and their corresponding icons
 const maneuverTypes = {
     esriDMTUnknown:{
         icon:'question-mark'

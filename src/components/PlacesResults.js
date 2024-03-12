@@ -4,9 +4,8 @@ import { CalciteFlowItem, CalciteBlock } from '@esri/calcite-components-react';
 import { useContext } from "react";
 import { AppContext } from "../App";
 
-
-// add a focus param to global context
-const PlaceResults = ({query}) => {
+// PlaceResults.js: Displays results from the places service in a list within the calcite-flow sidebar
+const PlacesResults = ({query}) => {
     const {appState, setAppState} = useContext(AppContext);
     
     if (!appState.placeResults) return;
@@ -26,4 +25,4 @@ const PlaceResults = ({query}) => {
     )
 }
 
-export default PlaceResults;
+export default PlacesResults;

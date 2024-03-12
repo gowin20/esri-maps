@@ -67,24 +67,24 @@ const usePlacesLayerElement = createElementHook(initPlacesLayer,updatePlacesLaye
 const usePlacesLayer = createPathHook(usePlacesLayerElement);
 
 const PlacesLayer = (props) => {
-    // Hook to create the places layer
+    // Initialize the places layer with our hook
     usePlacesLayer(props);
 
-    // using an effect to read/set app state. Can't use a component factory like `createLeafComponent` because of this.
     const {appState, setAppState} = useContext(AppContext);
     const map = useMap();
+
+    // Using an effect to read/set app state. We cannot use the react-leaflet component factory `createLeafComponent` because of this requirement.
     useEffect(()=>{
         map.eachLayer((lyr)=>{
             if (lyr.placeId) {
                 lyr.on('click',(e)=>{
-                    // TODO find result object in props.places and set focus to *that*
-                    console.log('click!')
                     const placeFocus = props.places.find(place => place.placeId === lyr.placeId);
                     setAppState({...appState,focus:placeFocus});
                 })
             }
         })
     },[map,appState,setAppState,props.places])
+    
     return null
 }
 

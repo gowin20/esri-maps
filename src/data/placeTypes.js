@@ -1,3 +1,4 @@
+// This file is used to populate the category buttons in components/SearchControl.js - to change button functionality, modify these here.
 const placeTypes = [
 {
     name: "Default",

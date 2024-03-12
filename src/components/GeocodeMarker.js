@@ -2,10 +2,9 @@ import {
     createElementHook, createPathHook, createElementObject
 } from '@react-leaflet/core';
 import { circleMarker, layerGroup } from 'leaflet';
-import { useEffect } from 'react';
-import { useMap } from 'react-leaflet';
 
-const createMarker = (props) => {
+// Returns a leaflet circleMarker at the geocoded location
+const createCircleMarker = (props) => {
 
     const location = [props.geocode.location.y,props.geocode.location.x];
     const label = props.geocode.address;
@@ -23,19 +22,21 @@ const createMarker = (props) => {
     return geocodeMarker;
 }
 
+// Initialize GeocodeMarker layer
 const initMarker = (props,context) => {
     const group = layerGroup({
         pane:'tooltipPane'
     })
-    const marker = createMarker(props);
+    const marker = createCircleMarker(props);
     marker.addTo(group);
     return createElementObject(group, context);
 }
 
+// Update GeocodeMarker layer
 const updateMarker = (instance, props, prevProps) => {
     if (props.geocode.location !== prevProps.geocode.location) {
         instance.clearLayers();
-        createMarker(props).addTo(instance);
+        createCircleMarker(props).addTo(instance);
     }
     return null;
 }
@@ -44,16 +45,19 @@ const updateMarker = (instance, props, prevProps) => {
 const useGeocodeMarkerElement = createElementHook(initMarker,updateMarker);
 const useGeocodeMarker = createPathHook(useGeocodeMarkerElement);
 
+// GeocodeMarker.js: Displays a circle marker at the location of a geocoded result
 const GeocodeMarker = (props) => {
-    const marker = useGeocodeMarker(props);
+    useGeocodeMarker(props);
 
     /*
+    Zoom to an extent that includes this marker as well as the PlaceMarker
     const map = useMap();
     useEffect(()=>{
         map.flyTo(marker.current.instance.getLatLng());
         marker.current.instance.openPopup();
     },[map,marker])
     */
+   return null
 }
 
 export default GeocodeMarker;

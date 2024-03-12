@@ -6,7 +6,7 @@ import PlacesLayer from './components/PlacesLayer.js';
 import VectorBasemapLayer from './components/VectorBasemapLayer.js';
 import SearchControl from './components/SearchControl';
 import PlaceDetails from './components/PlaceDetails';
-import PlaceResults from './components/PlacesList';
+import PlacesResults from './components/PlacesResults.js';
 import GeocodeSuggestions from './components/NavGeocodeSuggest.js';
 
 import { createContext, useState } from 'react';
@@ -20,35 +20,36 @@ import PlaceMarker from './components/PlaceMarker.js';
 import GeocodeMarker from './components/GeocodeMarker.js';
 import ReverseGeocode from './components/ReverseGeocode.js';
 
-export const apiKey = "AAPKc32a7748a314440a989ecb66b656f4cbJ12w-EP1NK3E3rjhrCSZnKO9pVDwNM9sxL65XsPW84t9gGtr_Ipdhtcek8nPJPWe";
+
+export const apiKey = process.env.REACT_APP_ARCGIS_API_KEY;
 export const authentication = ApiKeyManager.fromKey(apiKey);
 
-
-// state: | placeResults | geocodeResults | routeResults
+// Global app state used to track open menus and pass data between components
 export const AppContext = createContext({
   appState: {},
   setAppState: () => {}
 })
 
 function App() {
+
   const [appState,setAppState] = useState({
     state:'default'
   })
   const appContext = {appState,setAppState}
 
-  // basemap places control
+  // Control basemap places in the VectorBasemapLayer
   const [places, setPlaces] = useState('attributed');
   if (appState.state === 'default' && places === 'none') setPlaces('attributed');
   else if (appState.state !== 'default' && places === 'attributed') setPlaces('none');
 
-  console.log(appState)
   return (
     <AppContext.Provider value={appContext}>
       <div className="app-container">
-        {/* Places results and routing control */}
+
+        {/* This calcite-flow serves as the sidebar containing place results and navigation controls */}
         <CalciteFlow id="flowPanel">
             {appState.state === 'placeResults' && (
-            <PlaceResults />
+            <PlacesResults />
             )}
             {appState.focus && (
             <PlaceDetails id={appState.focus.placeId} />
@@ -58,12 +59,15 @@ function App() {
               <NavigationControl start={appState.geocodeResult} destination={appState.destination} />
             )}
         </CalciteFlow>
-        {/* Geocoding suggestions for navigation */}
+
+        {/* Geocode autosuggest popup, used in navigation */}
         {appState.searchQuery && (
           <GeocodeSuggestions query={appState.searchQuery} mapCenter={appState.mapCenter}/>
         )}
+
+        {/* Leaflet map */}
         <MapContainer center={[33.8219, -116.5468]} zoom={16} zoomControl={false}>
-              {/* Map and basemap controls */}
+              {/* Extent and basemap controls */}
               <ZoomControl position='bottomright' />
               <LayersControl position="bottomright">
                   <LayersControl.BaseLayer checked name="Default">
@@ -77,9 +81,10 @@ function App() {
                   </LayersControl.BaseLayer>
               </LayersControl>
 
-              {/* Places controls */}
+              {/* Place finding controls at top of map */}
               <SearchControl />
 
+              {/* Geocoding functionality */}
               {appState.navigationOpen && (
                 <ReverseGeocode />
               )}

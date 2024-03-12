@@ -38,5 +38,6 @@ const updateVectorBasemap = (instance,props,prevProps) => {
     }
 }
 
+// createPathComponent factory function from react-leaflet does a lot of heavy lifting for us here
 const VectorBasemapLayer = createPathComponent(createVectorBasemap,updateVectorBasemap);
 export default VectorBasemapLayer;
