@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../App";
 import "@esri/calcite-components/dist/components/calcite-flow-item";
 import "@esri/calcite-components/dist/components/calcite-button";
@@ -20,7 +20,7 @@ const NavigationControl = (props) => {
     }
     const back = (e) => {
         e.preventDefault();
-        setAppState({...appState, destination:null, route:null, geocodeResult:null})
+        setAppState({...appState, destination:null, route:null, geocodeResult:null, navigationOpen:null})
     }
 
     const queryRoute = async () => {
@@ -48,11 +48,14 @@ const NavigationControl = (props) => {
 
 
 // 34.055881, -117.157194
-
+    useEffect(()=>{
+        if (!appState.navigationOpen) setAppState({...appState,navigationOpen:true});
+    })
+    
 
     return (
         <CalciteFlowItem closable={true} heading='Route' onCalciteFlowItemClose={resetPanel} onCalciteFlowItemBack={back}>
-            <CalciteInputText onKeyUp={e=>setAppState({...appState,searchQuery:e.target.value})} id="navigationInput"/>
+            <CalciteInputText id="navigationInput"/> {/* event listener for this found in ReverseGeocode.js, to track map center */}
             <CalciteInputText value={props.destination.name} disabled/>
             <CalciteButton onClick={queryRoute}>Solve route</CalciteButton>
             {directions}

@@ -2,8 +2,9 @@ import {
     createElementHook, createPathHook, createElementObject
 } from '@react-leaflet/core';
 import { marker,icon,layerGroup } from 'leaflet';
-import { useEffect } from 'react';
+import { useEffect,useContext } from 'react';
 import { useMap } from 'react-leaflet';
+import { AppContext } from "../App";
 
 const markerImage = "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png"
 const shadowImage = "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png";
@@ -53,11 +54,13 @@ const usePlaceMarker = createPathHook(usePlaceMarkerElement);
 
 const PlaceMarker = (props) => {
     const marker = usePlaceMarker(props);
-
     const map = useMap();
+
     useEffect(()=>{
         map.flyTo(marker.current.instance.getLayers()[0].getLatLng());
         marker.current.instance.openPopup();
+
+
     },[map,marker,props.focus])
 }
 

@@ -3,17 +3,15 @@ import "@esri/calcite-components/dist/components/calcite-block";
 import { CalciteBlock, CalcitePanel } from '@esri/calcite-components-react';
 import { findSuggestions,getAddressCandidate } from "../api/geocode";
 import { useContext, useEffect,useState } from "react";
-import { useMap } from "react-leaflet";
 import { AppContext } from "../App";
 
 const GeocodeSuggestions = (props) => {
-
     const {appState, setAppState} = useContext(AppContext)
-    const map = useMap();
     const [suggestions,setSuggestions] = useState(null);
     useEffect(()=>{
         const getCandidates = async () => {
-            const newSuggestions = await findSuggestions(props.query,map.getCenter());
+            console.log(props.mapCenter);
+            const newSuggestions = await findSuggestions(props.query,props.mapCenter);
             setSuggestions(newSuggestions);
         }
         getCandidates();
@@ -36,14 +34,8 @@ const GeocodeSuggestions = (props) => {
         results.push(result)
     }
 
-    const resetQuery = (e) => {
-        e.preventDefault();
-        setAppState({...appState, searchQuery:null});
-        document.getElementById('navigationInput').value = '';
-    }
-
     return (
-        <CalcitePanel className="geocodeSuggestions" closable onCalcitePanelClose={resetQuery}>
+        <CalcitePanel className="geocodeSuggestions">
             {results}
         </CalcitePanel>
     )

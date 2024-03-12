@@ -18,6 +18,7 @@ import NavigationControl from './components/NavigationControl.js';
 import RouteLayer from './components/RouteLayer.js';
 import PlaceMarker from './components/PlaceMarker.js';
 import GeocodeMarker from './components/GeocodeMarker.js';
+import ReverseGeocode from './components/ReverseGeocode.js';
 
 export const apiKey = "AAPKc32a7748a314440a989ecb66b656f4cbJ12w-EP1NK3E3rjhrCSZnKO9pVDwNM9sxL65XsPW84t9gGtr_Ipdhtcek8nPJPWe";
 export const authentication = ApiKeyManager.fromKey(apiKey);
@@ -40,9 +41,27 @@ function App() {
   if (appState.state === 'default' && places === 'none') setPlaces('attributed');
   else if (appState.state !== 'default' && places === 'attributed') setPlaces('none');
 
+  console.log(appState)
   return (
     <AppContext.Provider value={appContext}>
       <div className="app-container">
+        {/* Places results and routing control */}
+        <CalciteFlow id="flowPanel">
+            {appState.state === 'placeResults' && (
+            <PlaceResults />
+            )}
+            {appState.focus && (
+            <PlaceDetails id={appState.focus.placeId} />
+            )}
+            {/* Navigation component */}
+            {appState.destination && (
+              <NavigationControl start={appState.geocodeResult} destination={appState.destination} />
+            )}
+        </CalciteFlow>
+        {/* Geocoding suggestions for navigation */}
+        {appState.searchQuery && (
+          <GeocodeSuggestions query={appState.searchQuery} mapCenter={appState.mapCenter}/>
+        )}
         <MapContainer center={[33.8219, -116.5468]} zoom={16} zoomControl={false}>
               {/* Map and basemap controls */}
               <ZoomControl position='bottomright' />
@@ -61,25 +80,8 @@ function App() {
               {/* Places controls */}
               <SearchControl />
 
-              {/* Places results and routing control */}
-              <CalciteFlow id="flowPanel">
-                  {appState.state === 'placeResults' && (
-                  <PlaceResults />
-                  )}
-                  {appState.focus && (
-                  <PlaceDetails id={appState.focus.placeId} />
-                  )}
-                  {/* Navigation component */}
-                  {appState.destination && (
-                    <NavigationControl start={appState.geocodeResult} destination={appState.destination} />
-                  )}
-              </CalciteFlow>
-
-              {/* Geocoding control and layer 
-              TODO add reverse geocode functionality on map click when 
-              */}
-              {appState.searchQuery && (
-                <GeocodeSuggestions query={appState.searchQuery}/>
+              {appState.navigationOpen && (
+                <ReverseGeocode />
               )}
               {appState.geocodeResult && (
                 <GeocodeMarker geocode={appState.geocodeResult}/>

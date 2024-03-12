@@ -21,7 +21,6 @@ body,
 }
 #map {
   position: absolute;
-  z-index: 1;
 }
 #control {
   position: absolute;
@@ -62,7 +61,7 @@ calcite-panel {
   top: 52px;
   left: 15px;
   width: 325px;
-  z-index: 999;
+  z-index: 4;
   cursor:default;
 }
 #flowPanel calcite-flow-item {
@@ -82,9 +81,9 @@ header {
 }
 
 .geocodeSuggestions {
-  z-index:2000;
+  z-index:9999;
   position:absolute;
-  top:135px;
+  top:200px;
   left:15px;
   width:325px;
   height:auto;
