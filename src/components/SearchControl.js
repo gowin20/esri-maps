@@ -34,7 +34,7 @@ const SearchControl = () => {
 
     const categoryChips = [];
     placeTypes.forEach(category=>{
-        if (!category.isButton) return;
+        if (category.name === 'Default') return;
         const chip = <CalciteChip className='categoryButton' scale='s' kind='neutral' appearance='solid' value={category.name} key={category.name} onCalciteChipSelect={categoryChipClicked}>
             <CalciteAvatar slot='image' scale='s' thumbnail={category.icon}/>
             {category.name}

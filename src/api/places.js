@@ -44,7 +44,6 @@ export const fetchPlaces = async (query,map) => {
             }
             console.log('Results:',results)
             return results;
-
         }
     } catch (err) {
         console.error(err)

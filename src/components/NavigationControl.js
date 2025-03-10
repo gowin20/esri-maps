@@ -59,7 +59,7 @@ const NavigationControl = (props) => {
         <CalciteFlowItem closable={true} heading='Route' onCalciteFlowItemClose={resetPanel} onCalciteFlowItemBack={back}>
             <CalciteInputText id="navigationInput"/> {/* event listener for this found in ReverseGeocode.js, to track map center */}
             <CalciteInputText value={props.destination.name} disabled/>
-            <CalciteButton onClick={queryRoute}>Solve route</CalciteButton>
+            <CalciteButton onClick={queryRoute}>Get directions</CalciteButton>
             {directions}
         </CalciteFlowItem>
     )

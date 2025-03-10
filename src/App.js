@@ -66,7 +66,7 @@ function App() {
         )}
 
         {/* Leaflet map */}
-        <MapContainer center={[33.8219, -116.5468]} zoom={16} zoomControl={false}>
+        <MapContainer center={[51.4974, -0.1356]} zoom={15} zoomControl={false}>
               {/* Extent and basemap controls */}
               <ZoomControl position='bottomright' />
               <LayersControl position="bottomright">
