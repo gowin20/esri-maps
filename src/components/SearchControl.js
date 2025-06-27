@@ -1,5 +1,5 @@
 import placeTypes, {getPlaceType} from '../data/placeTypes.js';
-import { fetchPlacesRaw } from '../api/places.js';
+import { fetchPlaces } from '../api/places.js';
 import { AppContext } from "../App.js";
 
 import { useMap } from "react-leaflet";
@@ -21,8 +21,8 @@ const SearchControl = () => {
     const queryPlaces = async (categoryIds) => {
         // Perform REST API call
         let results;
-        if (categoryIds) results = await fetchPlacesRaw(categoryIds,map);
-        else results = await fetchPlacesRaw(query,map);
+        if (categoryIds) results = await fetchPlaces(categoryIds,map);
+        else results = await fetchPlaces(query,map);
         // Pass results to global app state
         if (results) setAppState({...appState, state: 'placeResults', placeResults:results})
     }
