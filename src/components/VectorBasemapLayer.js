@@ -1,9 +1,13 @@
 import { 
     createElementObject, 
-    createPathComponent
-} from '@react-leaflet/core'
+    createElementHook,
+    createPathHook
+} from '@react-leaflet/core';
 import { vectorBasemapLayer } from 'esri-leaflet-vector';
 import { apiKey } from '../App';
+import { AppContext } from "../App.js";
+import { useMap } from "react-leaflet";
+import { useEffect,useContext } from 'react';
 
 // VectorBasemapLayer component: Renders a vector basemap layer using Esri Leaflet Vector
 // Data source: ArcGIS basemap styles service
@@ -33,10 +37,43 @@ const updateVectorBasemap = (instance,props,prevProps) => {
         else if (props.places === 'attributed') {
             places.forEach((lyr) => {
                 mlMap.setLayoutProperty(lyr.id, "visibility", "visible")
-            }) 
+            })
         }
     }
 }
 
-const VectorBasemapLayer = createPathComponent(createVectorBasemap,updateVectorBasemap);
+const useBasemapElement = createElementHook(createVectorBasemap,updateVectorBasemap);
+const useBasemapLayer = createPathHook(useBasemapElement);
+
+const VectorBasemapLayer = (props) => {
+    const basemap = useBasemapLayer(props);
+    const {appState, setAppState} = useContext(AppContext);
+
+    useEffect(()=>{
+
+            basemap.current.context.map.on('click',(e)=>{
+
+                if (basemap.current.instance._ready && basemap.current.instance._maplibreGL._glMap) {            
+                    const maplibreMap = basemap.current.instance._maplibreGL._glMap;
+                    const features = maplibreMap.queryRenderedFeatures(maplibreMap.project(e.latlng));
+                    
+                    if (features.length && features[0].properties.esri_place_id) {
+                        const focus = {
+                            location:{
+                                x:e.latlng.lng,
+                                y:e.latlng.lat
+                            },
+                            categories:[{label:'Map click'}],
+                            placeId:features[0].properties.esri_place_id
+                        }
+                        setAppState({...appState,focus:focus})
+                    }
+                }
+
+            })
+    },[basemap])
+
+    return null;
+}
+
 export default VectorBasemapLayer;

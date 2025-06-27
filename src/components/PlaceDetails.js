@@ -6,31 +6,8 @@ import { CalciteFlowItem, CalciteBlock, CalciteIcon, CalciteButton } from '@esri
 import { AppContext } from "../App";
 import { useContext, useEffect, useState } from "react";
 import { fetchPlaceDetails } from "../api/places";
-// when will the sidebar update?
-// invisible by default
-// when search result is clicked, show place
-// when map POI is clicked, show place
 
-// displays information about a place (poi or geocoding result)
-// includes navigation options
-
-const PlaceInfo = ({heading, icon, value}) => {
-    if (value != null) {
-        return (
-            <CalciteBlock heading={heading} description={value}><CalciteIcon slot="icon" scale="m" icon={icon}/></CalciteBlock>
-        )
-    }
-}
-
-function formatCategoryNames(categories) {
-    let categoryLabel = ""
-    categories.forEach((category, i) => {
-      categoryLabel += `${category.label} (${category.categoryId})`
-      categoryLabel += i < categories.length - 1 ? ", " : ""
-    })
-    return categoryLabel
-}
-
+// PlaceDetails.js: Displays details about a point of interest in the calcite-flow sidebar
 const PlaceDetails = (props) => {
     const {appState, setAppState} = useContext(AppContext);
     const [placeDetails, setPlaceDetails] = useState(null);
@@ -38,22 +15,42 @@ const PlaceDetails = (props) => {
         e.preventDefault();
         setAppState({...appState, focus:null})
     }
+    const resetPanel = () => {
+        setAppState({state:'default'})
+    }
+    const openNavigation = (e) => {
+        setAppState({...appState, destination:{name:placeDetails.name,location:placeDetails.location}})
+    }
 
+    // Format a value with an icon and calcite block
+    const PlaceInfo = ({heading, icon, value}) => {
+        if (value != null) {
+            return (
+                <CalciteBlock heading={heading} description={value}><CalciteIcon slot="icon" scale="m" icon={icon}/></CalciteBlock>
+            )
+        }
+    }
+
+    // Helper function for "Categories" field
+    const formatCategoryNames = (categories) => {
+        let categoryLabel = ""
+        categories.forEach((category, i) => {
+        categoryLabel += `${category.label} (${category.categoryId})`
+        categoryLabel += i < categories.length - 1 ? ", " : ""
+        })
+        return categoryLabel
+    }
+
+    // Fetch place details from the places service on render
     useEffect(()=>{
         const queryPlaceDetails = async () => {
+            // Perform REST API call
             const details = await fetchPlaceDetails(props.id);
             setPlaceDetails(details);
         }
         if (!placeDetails || placeDetails.placeId !== appState.focus.placeId) queryPlaceDetails();
     })
-    const resetPanel = () => {
-        setAppState({state:'default'})
-    }
 
-    const openNavigation = (e) => {
-        setAppState({...appState, destination:{name:placeDetails.name,location:placeDetails.location}})
-    }
-    // TODO send request here based on the ID stored in appState.placeId
     return placeDetails && (
         <CalciteFlowItem closable={true} onCalciteFlowItemBack={back} onCalciteFlowItemClose={resetPanel} id={placeDetails.placeId} heading={placeDetails.name}>
             <CalciteButton icon-start="right" label="Navigate to location"slot="header-actions-end" onClick={openNavigation}></CalciteButton>

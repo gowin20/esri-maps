@@ -25,6 +25,7 @@ export const fetchPlaces = async (query,map) => {
         categoryIds: query.placeType?.categoryIds,
         searchText: query.searchText,
         pageSize:20,
+        icon:'png',
         authentication
     }
 
@@ -34,7 +35,9 @@ export const fetchPlaces = async (query,map) => {
     try {
 
         let response = await findPlacesWithinExtent(params)
-
+        console.log(response.results);
+        return response.results;
+        /*
         // Paginate results
         if (response.results.length > 0) {
             let results = response.results;
@@ -44,15 +47,14 @@ export const fetchPlaces = async (query,map) => {
             }
             console.log('Results:',results)
             return results;
-
         }
+            */
     } catch (err) {
         console.error(err)
     }   
 }
 
 // A version of the request that uses `fetch()` instead of ArcGIS REST JS
-// REST JS does not yet support the `icon` parameter added by last week's update to the places service :)
 export const fetchPlacesRaw = async (query, map) => {
     if (!query) return;
 
@@ -93,7 +95,7 @@ export const fetchPlacesRaw = async (query, map) => {
         
         return response.results;
 
-        /* We are not currently paginating results in this function
+        /* We are not currently paginating results in this app
         // Paginate results
         if (response.results.length > 0) {
             let results = response.results;
